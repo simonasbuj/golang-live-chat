@@ -1,0 +1,26 @@
+version: "2"
+run:
+  tests: true
+linters:
+  default: all
+  disable:
+    - depguard 
+    - testpackage 
+    - varnamelen
+    - revive # annoying when you're focusing on developing features and learning
+  exclusions:
+    rules:
+    - path: services/auth/handler
+      linters:
+        - wrapcheck
+      text: ".*"
+    generated: lax
+formatters:
+  default: all
+  enable:
+    - gofmt
+    - gofumpt
+    - goimports
+    - golines
+  exclusions:
+    generated: lax
