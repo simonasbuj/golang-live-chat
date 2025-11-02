@@ -19,15 +19,15 @@ type ChatService interface {
 
 type chatService struct {
 	clients map[*websocket.Conn]bool
-	rooms	map[string]map[*websocket.Conn]bool
+	rooms   map[string]map[*websocket.Conn]bool
 	mu      sync.Mutex
 }
 
 func NewChatService() *chatService {
 	return &chatService{
-		clients: 	make(map[*websocket.Conn]bool),
-		rooms: 		make(map[string]map[*websocket.Conn]bool),
-		mu:      	sync.Mutex{},
+		clients: make(map[*websocket.Conn]bool),
+		rooms:   make(map[string]map[*websocket.Conn]bool),
+		mu:      sync.Mutex{},
 	}
 }
 
@@ -82,6 +82,7 @@ func (c *chatService) LeaveRoom(roomID string, conn *websocket.Conn) {
 	clients, ok := c.rooms[roomID]
 	if ok {
 		delete(clients, conn)
+
 		if len(clients) == 0 {
 			delete(c.rooms, roomID)
 		}
