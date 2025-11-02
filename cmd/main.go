@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"golang-live-chat/config"
-	"golang-live-chat/internal/handlers"
+	"golang-live-chat/internal/handler"
 	"golang-live-chat/internal/services"
 	"log"
 	"net/http"
@@ -43,13 +43,12 @@ func main() {
 	}
 
 	chatSvc := services.NewChatService()
-	handler := handlers.Handler{Svc: chatSvc}
+	handler := handler.New(chatSvc, &upgrader)
 
 	e := echo.New()
 
-	e.GET("/ws", func(c echo.Context) error {
-		return handler.HandleWebSocket(c, &upgrader)
-	})
+	e.GET("/global-chat", handler.HandleGlobalChat)
+	e.GET("/chat", handler.HandleRoomChat)
 
 	err = e.Start(cfg.ChatAddress)
 	if err != nil {

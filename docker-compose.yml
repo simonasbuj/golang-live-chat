@@ -1,0 +1,13 @@
+services:
+  golang-live-chat-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "7072:7072"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      CHAT_ENVIRONMENT: ${CHAT_ENVIRONMENT}
