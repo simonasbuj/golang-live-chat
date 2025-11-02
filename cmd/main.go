@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/labstack/echo/v4"
@@ -15,22 +16,31 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 )
 
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		return true // allow any origin for now
-	},
-}
-
 func main() {
 	environment := os.Getenv("CHAT_ENVIRONMENT")
 	cfgPath := fmt.Sprintf("config/%s.yml", environment)
+
 	var cfg config.AppConfig
 
 	err := cleanenv.ReadConfig(cfgPath, &cfg)
 	if err != nil {
 		log.Panic("failed to load config: %w", err)
 	}
+
 	log.Printf("AppConfig => %+v\n", cfg)
+
+	upgrader := websocket.Upgrader{
+		CheckOrigin: func(r *http.Request) bool {
+			return true // allow any origin for now
+		},
+		HandshakeTimeout:  time.Duration(cfg.ChatHandshakeTimeout) * time.Second,
+		ReadBufferSize:    cfg.ChatReadBufferSize,
+		WriteBufferSize:   cfg.ChatWriteBufferSize,
+		WriteBufferPool:   nil,
+		Subprotocols:      nil,
+		Error:             nil,
+		EnableCompression: false,
+	}
 
 	chatSvc := services.NewChatService()
 	handler := handlers.Handler{Svc: chatSvc}

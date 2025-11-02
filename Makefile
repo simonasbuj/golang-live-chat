@@ -1,4 +1,5 @@
-
+run:
+	go run cmd/main.go
 
 # pre-commit
 lint:
