@@ -134,6 +134,10 @@ func (h *Handler) validateRoomAndUser(c echo.Context) (string, string, error) {
 
 	user := c.Request().Header.Get("Token")
 	if user == "" {
+		user = c.QueryParam("token")
+	}
+
+	if user == "" {
 		return "", "", c.JSON( //nolint:wrapcheck
 			http.StatusUnauthorized,
 			map[string]string{"error": "bad token"},
