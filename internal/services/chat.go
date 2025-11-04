@@ -1,20 +1,26 @@
 package services
 
 import (
+	"encoding/json"
+	"errors"
+	"golang-live-chat/internal/dto"
 	"log"
 	"sync"
 
 	"github.com/gorilla/websocket"
 )
 
+var ErrMarshalMsg = errors.New("failed to marshal msg")
+
 type ChatService interface {
 	AddClient(conn *websocket.Conn)
 	RemoveClient(conn *websocket.Conn)
 	BroadcastMessage(mt int, msg []byte)
+	WriteErrorToClient(conn *websocket.Conn, errMsg string)
 
 	JoinRoom(roomID string, conn *websocket.Conn)
 	LeaveRoom(roomID string, conn *websocket.Conn)
-	BoradcastMessageToRoom(roomID string, mt int, msg []byte)
+	BoradcastMessageToRoom(roomID string, mt int, msg dto.Message)
 }
 
 type chatService struct {
@@ -89,12 +95,17 @@ func (c *chatService) LeaveRoom(roomID string, conn *websocket.Conn) {
 	}
 }
 
-func (c *chatService) BoradcastMessageToRoom(roomID string, mt int, msg []byte) {
+func (c *chatService) BoradcastMessageToRoom(roomID string, mt int, msg dto.Message) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
+	msgJSON, err := json.Marshal(msg)
+	if err != nil {
+		log.Println("failed to marshal message: %w", err)
+	}
+
 	for client := range c.rooms[roomID] {
-		err := client.WriteMessage(mt, msg)
+		err := client.WriteMessage(mt, msgJSON)
 		if err != nil {
 			log.Println("failed to write message to a client:", err)
 
@@ -105,5 +116,20 @@ func (c *chatService) BoradcastMessageToRoom(roomID string, mt int, msg []byte) 
 
 			delete(c.clients, client)
 		}
+	}
+}
+
+func (c *chatService) WriteErrorToClient(conn *websocket.Conn, errMsg string) {
+	errResp, err := json.Marshal(dto.ErrorResponse{
+		Type:  "error",
+		Error: errMsg,
+	})
+	if err != nil {
+		log.Println("failed to marshal error response")
+	}
+
+	err = conn.WriteMessage(websocket.TextMessage, errResp)
+	if err != nil {
+		log.Println("failed to send error to client")
 	}
 }
