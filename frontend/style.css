@@ -1,0 +1,30 @@
+.message-in {
+    max-width: 70%;
+    background: #f1f1f1;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    margin-bottom: .5rem;
+    margin-right: auto;
+}
+
+.message-out {
+    max-width: 70%;
+    background: #0d6efd;
+    padding: .5rem 1rem;
+    border-radius: 1rem;
+    margin-bottom: .5rem;
+    color: white;
+    margin-left: auto;
+}
+
+.message-info {
+    width: 100%;
+    background: #e9ecef;
+    color: #495057;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+    font-style: italic;
+}

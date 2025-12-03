@@ -17,5 +17,6 @@ RUN mkdir /app
 
 COPY --from=builder /app/chatApp /app
 COPY --from=builder /app/config ./config
+COPY --from=builder /app/frontend ./frontend
 
 CMD ["/app/chatApp"]

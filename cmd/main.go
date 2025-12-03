@@ -47,6 +47,8 @@ func main() {
 
 	e := echo.New()
 
+	e.Static("/frontend", "./frontend")
+
 	e.GET("/global-chat", handler.HandleGlobalChat)
 	e.GET("/chat", handler.HandleRoomChat)
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="icon.png">
+    <title>GoChat</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="..."
+        crossorigin="anonymous"></script>
+
+    <script defer src="chatApp.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.15.2/dist/cdn.min.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-light">
+    <div class="container py-5 d-flex justify-content-center">
+        <div class="card shadow-lg rounded-4 p-4 w-100" style="max-width: 650px;" x-data="chatApp()" x-init="init()">
+
+            <div class="card mb-4 p-3 rounded-3 shadow-sm border-0 bg-white">
+                <div x-show="!chatRoomCode || isLoading" class="row g-2 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Chat Room Code</label>
+                        <input type="text" class="form-control" x-model="inputChatRoomCode">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Username</label>
+                        <input type="text" class="form-control" x-model="inputUsername">
+                    </div>
+                    <div class="col-md-4 d-grid">
+                        <button class="btn btn-primary rounded-3 py-2" @click="join()">JOIN</button>
+                    </div>
+                </div>
+                <div x-show="chatRoomCode && !isLoading" >
+                    <div class=" d-flex justify-content-between align-items-center py-2 px-3 rounded">
+                        <div class="d-flex align-items-center gap-2">
+                            <h4 class="mb-0" style="font-weight: 500; line-height: 1;">Room:</h4>
+                            <span x-text="chatRoomCode" class="fw-bold" style="font-size: 1.25rem; line-height: 1;"></span>
+                        </div>
+                        <button type="button" class="btn-close" aria-label="Close" @click="leave()"></button>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div x-ref="chatbox" class="card p-3 mb-3 rounded-3 shadow-sm border-0 bg-white" style="height: 55vh; overflow-y: auto;">
+                <template x-for="msg in messages">
+                    <div :class="
+                        msg.type != 'message' ? 'message-info'
+                        : (msg.user === username ? 'message-out' : 'message-in')
+                    ">
+                        <strong x-text="msg.user"></strong><br>
+                        <span x-text="msg.content"></span>
+                    </div>
+                </template>
+            </div>
+
+            <div class="card p-3 rounded-3 shadow-sm border-0 bg-white">
+                <div class="input-group">
+                    <input type="text" class="form-control rounded-3" placeholder="Type a message..." x-model="inputMessage"
+                        @keyup.enter="send()">
+                    <button class="btn btn-success rounded-3 px-4 mx-2" @click="send()">Send</button>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+
+</body>
+
+</html>

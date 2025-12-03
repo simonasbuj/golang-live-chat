@@ -1,3 +1,14 @@
+# Load .env.example and .env
+ifneq (,$(wildcard .env.example))
+    include .env.example
+    export $(shell sed 's/=.*//' .env.example)
+endif
+
+ifneq (,$(wildcard .env))
+    include .env
+    export $(shell sed 's/=.*//' .env)
+endif
+
 run:
 	go run cmd/main.go
 
