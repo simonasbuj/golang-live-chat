@@ -75,7 +75,7 @@ function chatApp() {
         },
 
         leave() {
-            this.socket.close()
+            this.socket.close(1000, "User left the room")
             this.socket = null
 
             this.chatRoomCode = null
