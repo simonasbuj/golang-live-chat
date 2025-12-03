@@ -23,7 +23,7 @@
         <div class="card shadow-lg rounded-4 p-4 w-100" style="max-width: 650px;" x-data="chatApp()" x-init="init()">
 
             <div class="card mb-4 p-3 rounded-3 shadow-sm border-0 bg-white">
-                <div class="row g-2 align-items-end">
+                <div x-show="!chatRoomCode || isLoading" class="row g-2 align-items-end">
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Chat Room Code</label>
                         <input type="text" class="form-control" x-model="inputChatRoomCode">
@@ -36,6 +36,16 @@
                         <button class="btn btn-primary rounded-3 py-2" @click="join()">JOIN</button>
                     </div>
                 </div>
+                <div x-show="chatRoomCode && !isLoading" >
+                    <div class=" d-flex justify-content-between align-items-center py-2 px-3 rounded">
+                        <div class="d-flex align-items-center gap-2">
+                            <h4 class="mb-0" style="font-weight: 500; line-height: 1;">Room:</h4>
+                            <span x-text="chatRoomCode" class="fw-bold" style="font-size: 1.25rem; line-height: 1;"></span>
+                        </div>
+                        <button type="button" class="btn-close" aria-label="Close" @click="leave()"></button>
+                    </div>
+                </div>
+                
             </div>
 
             <div x-ref="chatbox" class="card p-3 mb-3 rounded-3 shadow-sm border-0 bg-white" style="height: 55vh; overflow-y: auto;">
@@ -50,7 +60,6 @@
                 </template>
             </div>
 
-            <!-- Send Box -->
             <div class="card p-3 rounded-3 shadow-sm border-0 bg-white">
                 <div class="input-group">
                     <input type="text" class="form-control rounded-3" placeholder="Type a message..." x-model="inputMessage"

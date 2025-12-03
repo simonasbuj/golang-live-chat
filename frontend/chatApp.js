@@ -5,10 +5,12 @@ function chatApp() {
         inputMessage: "",
 
         username: "",
-        chatRoomCode: "",
+        chatRoomCode: null,
 
         socket: null,
         messages: [],
+
+        isLoading: false,
 
         async init() {
             console.log("chatApp.js is LOADED")
@@ -17,6 +19,7 @@ function chatApp() {
         join() {
             if (!this.inputChatRoomCode.trim() || !this.inputUsername.trim()) return
 
+            this.isLoading = true
             this.messages = []
             this.username = this.inputUsername
             this.chatRoomCode = this.inputChatRoomCode
@@ -39,6 +42,8 @@ function chatApp() {
 
             this.inputUsername = ""
             this.inputChatRoomCode = ""
+            this.isLoading = false
+            console.log(this.isLoading, this.chatRoomCode)
         },
 
         handleReceiveMsg(event) {
@@ -67,6 +72,14 @@ function chatApp() {
             }
 
             this.inputMessage = ""
+        },
+
+        leave() {
+            this.socket.close()
+            this.socket = null
+
+            this.chatRoomCode = null
+            this.messages = []
         },
 
         scrollToTextBoxBottom() {
