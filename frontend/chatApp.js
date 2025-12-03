@@ -58,7 +58,6 @@ function chatApp() {
             if (!this.inputMessage.trim()) return
 
             const msg = {
-                user: this.username,
                 content: this.inputMessage,
             }
 
