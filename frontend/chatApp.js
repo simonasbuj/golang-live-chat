@@ -33,7 +33,7 @@ function chatApp() {
 
             this.socket.addEventListener("close", () => {
                 console.log("Disconnected. Reconnecting in 2s…");
-                setTimeout(() => this.connect(), 2000);
+                setTimeout(() => this.join(), 2000);
             });
 
             this.inputUsername = ""
