@@ -1,7 +1,7 @@
 function chatApp() {
     return {
-        inputUsername: "ui-user",
-        inputChatRoomCode: "basketball",
+        inputUsername: "",
+        inputChatRoomCode: "",
         inputMessage: "",
 
         username: "",
