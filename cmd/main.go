@@ -46,7 +46,9 @@ func main() {
 	handler := handler.New(chatSvc, &upgrader)
 
 	e := echo.New()
-
+	
+	e.Static("/frontend", "./frontend")
+	
 	e.GET("/global-chat", handler.HandleGlobalChat)
 	e.GET("/chat", handler.HandleRoomChat)
 
