@@ -17,6 +17,7 @@ function chatApp() {
         join() {
             if (!this.inputChatRoomCode.trim() || !this.inputUsername.trim()) return
 
+            this.messages = []
             this.username = this.inputUsername
             this.chatRoomCode = this.inputChatRoomCode
 
