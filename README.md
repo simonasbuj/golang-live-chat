@@ -4,4 +4,4 @@ App is deployed here: https://golang-live-chat-production.up.railway.app/fronten
 
 ## UI
 
-![alt text](image.png)
+![alt text](readme/image.png)
