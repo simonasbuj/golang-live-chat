@@ -35,13 +35,16 @@ function chatApp() {
 
             this.socket.addEventListener("message", (event) => this.handleReceiveMsg(event));
 
-            this.socket.addEventListener("close", () => {
-                console.log("Disconnected. Reconnecting in 2s…");
+            this.socket.addEventListener("close", (event) => {
+                if (event.code === 1000) {
+                    console.log("Normal closure — not reconnecting.");
+                    return;
+                }
+
+                console.log("Unexpected disconnect. Reconnecting in 2s…");
                 setTimeout(() => this.join(), 2000);
             });
 
-            this.inputUsername = ""
-            this.inputChatRoomCode = ""
             this.isLoading = false
         },
 
